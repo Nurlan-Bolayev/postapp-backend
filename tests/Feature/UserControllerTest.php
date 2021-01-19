@@ -27,7 +27,6 @@ class UserControllerTest extends TestCase
 
         $this
             ->postJson('api/register', $data)
-            ->dump()
             ->assertJson([
                 'email' => $email,
             ]);
