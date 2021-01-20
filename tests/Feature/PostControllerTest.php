@@ -24,6 +24,7 @@ class PostControllerTest extends TestCase
             ->postJson('api/posts/create', [
                 'text' => $text,
             ])
+            ->assertCreated()
             ->assertJson([
                 'creator_id' => $user->id,
                 'text' => $text,
