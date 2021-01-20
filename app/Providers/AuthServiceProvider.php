@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Comment;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -27,5 +28,6 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
         Gate::define('modify-post', fn(User $user, Post $post) => $post->creator_id == $user->id);
+        Gate::define('modify-comment', fn(User $user, Comment $comment) => $user->id == $comment->owner_id);
     }
 }
