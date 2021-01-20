@@ -17,22 +17,22 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
 
-    Route::post('/register', UserController::class . '@register');
-    Route::post('/login', UserController::class . '@login');
-    Route::post('/posts/create');
+Route::middleware('auth:api')->group(function () {
+    Route::get('/users/me', fn(Request $request) => $request->user());
+    Route::get('/posts', PostController::class . '@all');
 
     Route::post('/posts/create', PostController::class . '@create');
     Route::put('/posts/{post}', PostController::class . '@update');
     Route::delete('/posts/{post}', PostController::class . '@delete');
 
+    Route::get('/posts/{post}/comments', CommentController::class . '@all');
     Route::post('/posts/{post}/comments/create', CommentController::class . '@create');
     Route::put('/posts/comments/{comment}', CommentController::class . '@update');
     Route::delete('/posts/comments/{comment}', CommentController::class . '@delete');
 
-    Route::post('/comments/{comment}/reply' , CommentController::class .'@replyTo');
-    Route::put('/comments/{comment}/reply' , CommentController::class .'@editReply');
-    Route::delete('/comments/{comment}/reply' , CommentController::class .'@deleteReply');
+    Route::get('/comments/{comment}/replies', CommentController::class . '@allReplies');
+    Route::post('/comments/{comment}/reply', CommentController::class . '@replyTo');
+    Route::put('/comments/{comment}/reply', CommentController::class . '@editReply');
+    Route::delete('/comments/{comment}/reply', CommentController::class . '@deleteReply');
+});

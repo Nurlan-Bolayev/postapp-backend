@@ -9,6 +9,22 @@ use Illuminate\Http\Request;
 
 class CommentController extends Controller
 {
+    public function all(Post $post)
+    {
+        return $post->comments()
+            ->with('owner')
+            ->withCount('replies')
+            ->get();
+    }
+
+    public function allReplies(Comment $comment)
+    {
+        return $comment
+            ->replies()
+            ->with('owner')
+            ->get();
+    }
+
     public function create(Request $request, Post $post)
     {
         $attrs = $request->validate([
@@ -22,7 +38,7 @@ class CommentController extends Controller
             'post_id' => $post->id,
         ];
 
-        return Comment::query()->forceCreate(array_merge($body, $attrs));
+        return Comment::query()->forceCreate(array_merge($body, $attrs))->load('owner');
     }
 
     public function update(Request $request, Comment $comment)
@@ -68,7 +84,7 @@ class CommentController extends Controller
             'parent_id' => $comment->id,
         ];
 
-        return Comment::query()->forceCreate(array_merge($body, $attrs));
+        return Comment::query()->forceCreate(array_merge($body, $attrs))->load('owner');
     }
 
     public function editReply(Request $request, Comment $comment)
