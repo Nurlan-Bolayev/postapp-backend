@@ -13,13 +13,14 @@ class UserController extends Controller
     {
         $attrs = $request->validate([
             'name' => 'required|string|min:4',
-            'email' => 'required|email',
+            'email' => 'required|email|unique:users,email',
             'password' => 'required|min:4'
         ],[
             'email.required' => 'The email field is required',
             'password.min' => 'The password is too short',
         ]);
 
+        /** @var User $user */
         $user = User::query()->create([
             'name' => $attrs['name'],
             'email' => $attrs['email'],
