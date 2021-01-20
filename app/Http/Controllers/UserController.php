@@ -25,6 +25,9 @@ class UserController extends Controller
             'email' => $attrs['email'],
             'password' => Hash::make($attrs['password']),
         ]);
+
+        \Auth::login($user, true);
+
         return $user;
     }
 
@@ -43,7 +46,5 @@ class UserController extends Controller
         throw ValidationException::withMessages([
            'password' => ['The password is incorrect.'],
         ]);
-
     }
-
 }
